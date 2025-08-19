@@ -475,14 +475,14 @@
             <div class="row">
                 <div class="col">
                     <div class="input-group">
-                        <label for="invoice-date">تاریخ شمسی (YYYY/MM/DD)</label>
-                        <input type="text" id="invoice-date" placeholder="1403/03/15">
+                        <label for="invoice-date-input">تاریخ شمسی (YYYY/MM/DD)</label>
+                        <input type="text" id="invoice-date-input" placeholder="1403/03/15">
                     </div>
                 </div>
                 <div class="col">
                     <div class="input-group">
-                        <label for="invoice-customer">طرف حساب</label>
-                        <select id="invoice-customer">
+                        <label for="invoice-customer-select">طرف حساب</label>
+                        <select id="invoice-customer-select">
                             <option value="">انتخاب طرف حساب</option>
                         </select>
                     </div>
@@ -494,14 +494,14 @@
             <div class="row">
                 <div class="col">
                     <div class="input-group">
-                        <label for="item-name">نام کالا/خدمت</label>
-                        <input type="text" id="item-name" placeholder="نام آیتم">
+                        <label for="item-name-input">نام کالا/خدمت</label>
+                        <input type="text" id="item-name-input" placeholder="نام آیتم">
                     </div>
                 </div>
                 <div class="col">
                     <div class="input-group">
-                        <label for="item-quantity">تعداد</label>
-                        <input type="number" id="item-quantity" min="1" value="1">
+                        <label for="item-quantity-input">تعداد</label>
+                        <input type="number" id="item-quantity-input" min="1" value="1">
                     </div>
                 </div>
             </div>
@@ -509,8 +509,8 @@
             <div class="row">
                 <div class="col">
                     <div class="input-group">
-                        <label for="item-unit">واحد اندازه گیری</label>
-                        <select id="item-unit">
+                        <label for="item-unit-select">واحد اندازه گیری</label>
+                        <select id="item-unit-select">
                             <option value="عدد">عدد</option>
                             <option value="کارتن">کارتن</option>
                         </select>
@@ -518,13 +518,13 @@
                 </div>
                 <div class="col">
                     <div class="input-group">
-                        <label for="item-price">قیمت واحد (تومان)</label>
-                        <input type="number" id="item-price" min="0" placeholder="قیمت واحد">
+                        <label for="item-price-input">قیمت واحد (تومان)</label>
+                        <input type="number" id="item-price-input" min="0" placeholder="قیمت واحد">
                     </div>
                 </div>
             </div>
             
-            <button id="add-item" class="btn btn-primary">
+            <button id="add-item-btn" class="btn btn-primary">
                 <i class="fas fa-plus"></i> افزودن آیتم
             </button>
             
@@ -558,11 +558,11 @@
             <div class="invoice-summary">
                 <div class="summary-row">
                     <span>مبلغ قابل پرداخت:</span>
-                    <span id="total">0 تومان</span>
+                    <span id="total-amount">0 تومان</span>
                 </div>
             </div>
             
-            <button id="save-invoice" class="btn btn-primary" style="width: 100%; padding: 10px;">
+            <button id="save-invoice-btn" class="btn btn-primary" style="width: 100%; padding: 10px;">
                 <i class="fas fa-save"></i> ثبت فاکتور
             </button>
             
@@ -575,14 +575,14 @@
             <div class="row">
                 <div class="col">
                     <div class="input-group">
-                        <label for="payment-date">تاریخ شمسی (YYYY/MM/DD)</label>
-                        <input type="text" id="payment-date" placeholder="1403/03/15">
+                        <label for="payment-date-input">تاریخ شمسی (YYYY/MM/DD)</label>
+                        <input type="text" id="payment-date-input" placeholder="1403/03/15">
                     </div>
                 </div>
                 <div class="col">
                     <div class="input-group">
-                        <label for="payment-customer">طرف حساب</label>
-                        <select id="payment-customer">
+                        <label for="payment-customer-select">طرف حساب</label>
+                        <select id="payment-customer-select">
                             <option value="">انتخاب طرف حساب</option>
                         </select>
                     </div>
@@ -592,8 +592,8 @@
             <div class="row">
                 <div class="col">
                     <div class="input-group">
-                        <label for="payment-type">نوع تراکنش</label>
-                        <select id="payment-type">
+                        <label for="payment-type-select">نوع تراکنش</label>
+                        <select id="payment-type-select">
                             <option value="receipt">دریافت</option>
                             <option value="payment">پرداخت</option>
                         </select>
@@ -601,18 +601,18 @@
                 </div>
                 <div class="col">
                     <div class="input-group">
-                        <label for="payment-amount">مبلغ (تومان)</label>
-                        <input type="number" id="payment-amount" min="0" placeholder="مبلغ تراکنش">
+                        <label for="payment-amount-input">مبلغ (تومان)</label>
+                        <input type="number" id="payment-amount-input" min="0" placeholder="مبلغ تراکنش">
                     </div>
                 </div>
             </div>
             
             <div class="input-group">
-                <label for="payment-description">توضیحات</label>
-                <textarea id="payment-description" rows="2" placeholder="توضیحات تراکنش"></textarea>
+                <label for="payment-description-textarea">توضیحات</label>
+                <textarea id="payment-description-textarea" rows="2" placeholder="توضیحات تراکنش"></textarea>
             </div>
             
-            <button id="save-payment" class="btn btn-primary" style="width: 100%; padding: 10px;">
+            <button id="save-payment-btn" class="btn btn-primary" style="width: 100%; padding: 10px;">
                 <i class="fas fa-save"></i> ثبت تراکنش
             </button>
             
@@ -626,16 +626,16 @@
                 <div class="row">
                     <div class="col">
                         <div class="input-group">
-                            <label for="report-customer">طرف حساب</label>
-                            <select id="report-customer">
+                            <label for="report-customer-select">طرف حساب</label>
+                            <select id="report-customer-select">
                                 <option value="">همه طرف حساب ها</option>
                             </select>
                         </div>
                     </div>
                     <div class="col">
                         <div class="input-group">
-                            <label for="report-type">نوع گزارش</label>
-                            <select id="report-type">
+                            <label for="report-type-select">نوع گزارش</label>
+                            <select id="report-type-select">
                                 <option value="balance">مانده حساب</option>
                                 <option value="invoices">فاکتورها</option>
                                 <option value="transactions">تراکنش ها</option>
@@ -644,7 +644,7 @@
                     </div>
                 </div>
                 
-                <button id="generate-report" class="btn btn-primary">
+                <button id="generate-report-btn" class="btn btn-primary">
                     <i class="fas fa-chart-bar"></i> تولید گزارش
                 </button>
             </div>
@@ -660,14 +660,14 @@
             <div class="row">
                 <div class="col">
                     <div class="input-group">
-                        <label for="customer-name">نام طرف حساب</label>
-                        <input type="text" id="customer-name" placeholder="نام کامل">
+                        <label for="customer-name-input">نام طرف حساب</label>
+                        <input type="text" id="customer-name-input" placeholder="نام کامل">
                     </div>
                 </div>
                 <div class="col">
                     <div class="input-group">
-                        <label for="customer-phone">تلفن</label>
-                        <input type="text" id="customer-phone" placeholder="شماره تلفن">
+                        <label for="customer-phone-input">تلفن</label>
+                        <input type="text" id="customer-phone-input" placeholder="شماره تلفن">
                     </div>
                 </div>
             </div>
@@ -675,19 +675,19 @@
             <div class="row">
                 <div class="col">
                     <div class="input-group">
-                        <label for="customer-province">استان</label>
-                        <input type="text" id="customer-province" placeholder="استان">
+                        <label for="customer-province-input">استان</label>
+                        <input type="text" id="customer-province-input" placeholder="استان">
                     </div>
                 </div>
                 <div class="col">
                     <div class="input-group">
-                        <label for="customer-address">آدرس</label>
-                        <input type="text" id="customer-address" placeholder="آدرس طرف حساب">
+                        <label for="customer-address-input">آدرس</label>
+                        <input type="text" id="customer-address-input" placeholder="آدرس طرف حساب">
                     </div>
                 </div>
             </div>
             
-            <button id="save-customer" class="btn btn-primary">
+            <button id="save-customer-btn" class="btn btn-primary">
                 <i class="fas fa-save"></i> ثبت طرف حساب
             </button>
             
@@ -730,15 +730,15 @@
         const mainApp = document.getElementById('main-app');
         const tabs = document.querySelectorAll('.tab');
         const tabContents = document.querySelectorAll('.tab-content');
-        const invoiceCustomerSelect = document.getElementById('invoice-customer');
-        const paymentCustomerSelect = document.getElementById('payment-customer');
-        const reportCustomerSelect = document.getElementById('report-customer');
+        const invoiceCustomerSelect = document.getElementById('invoice-customer-select');
+        const paymentCustomerSelect = document.getElementById('payment-customer-select');
+        const reportCustomerSelect = document.getElementById('report-customer-select');
         const itemsTable = document.getElementById('items-table').querySelector('tbody');
-        const addItemBtn = document.getElementById('add-item');
-        const saveInvoiceBtn = document.getElementById('save-invoice');
-        const savePaymentBtn = document.getElementById('save-payment');
-        const saveCustomerBtn = document.getElementById('save-customer');
-        const generateReportBtn = document.getElementById('generate-report');
+        const addItemBtn = document.getElementById('add-item-btn');
+        const saveInvoiceBtn = document.getElementById('save-invoice-btn');
+        const savePaymentBtn = document.getElementById('save-payment-btn');
+        const saveCustomerBtn = document.getElementById('save-customer-btn');
+        const generateReportBtn = document.getElementById('generate-report-btn');
         const customersTable = document.getElementById('customers-table').querySelector('tbody');
         const loginBtn = document.getElementById('login-btn');
         const logoutBtn = document.getElementById('logout-btn');
@@ -892,10 +892,10 @@
         
         // افزودن آیتم به فاکتور
         addItemBtn.addEventListener('click', () => {
-            const name = document.getElementById('item-name').value;
-            const quantity = parseInt(document.getElementById('item-quantity').value);
-            const unit = document.getElementById('item-unit').value;
-            const price = parseInt(document.getElementById('item-price').value);
+            const name = document.getElementById('item-name-input').value;
+            const quantity = parseInt(document.getElementById('item-quantity-input').value);
+            const unit = document.getElementById('item-unit-select').value;
+            const price = parseInt(document.getElementById('item-price-input').value);
             
             if (!name || !quantity || !price) {
                 showMessage('invoice-message', 'لطفا اطلاعات آیتم را کامل وارد کنید', 'error');
@@ -917,9 +917,9 @@
             calculateTotals();
             
             // پاک کردن فیلدها
-            document.getElementById('item-name').value = '';
-            document.getElementById('item-quantity').value = '1';
-            document.getElementById('item-price').value = '';
+            document.getElementById('item-name-input').value = '';
+            document.getElementById('item-quantity-input').value = '1';
+            document.getElementById('item-price-input').value = '';
         });
         
         // نمایش آیتم های فاکتور در جدول
@@ -957,12 +957,12 @@
         function calculateTotals() {
             const total = currentItems.reduce((sum, item) => sum + item.total, 0);
             
-            document.getElementById('total').textContent = `${total.toLocaleString()} تومان`;
+            document.getElementById('total-amount').textContent = `${total.toLocaleString()} تومان`;
         }
         
         // ثبت فاکتور جدید
         saveInvoiceBtn.addEventListener('click', () => {
-            const date = document.getElementById('invoice-date').value;
+            const date = document.getElementById('invoice-date-input').value;
             const customerId = parseInt(invoiceCustomerSelect.value);
             const customer = customers.find(c => c.id === customerId);
             
@@ -1009,7 +1009,7 @@
             showMessage('invoice-message', 'فاکتور با موفقیت ثبت شد', 'success');
             
             // پاک کردن فرم
-            document.getElementById('invoice-date').value = '';
+            document.getElementById('invoice-date-input').value = '';
             invoiceCustomerSelect.value = '';
             currentItems = [];
             renderItemsTable();
@@ -1060,12 +1060,12 @@
         
         // ثبت تراکنش پرداخت/دریافت
         savePaymentBtn.addEventListener('click', () => {
-            const date = document.getElementById('payment-date').value;
+            const date = document.getElementById('payment-date-input').value;
             const customerId = parseInt(paymentCustomerSelect.value);
             const customer = customers.find(c => c.id === customerId);
-            const type = document.getElementById('payment-type').value;
-            const amount = parseInt(document.getElementById('payment-amount').value);
-            const description = document.getElementById('payment-description').value;
+            const type = document.getElementById('payment-type-select').value;
+            const amount = parseInt(document.getElementById('payment-amount-input').value);
+            const description = document.getElementById('payment-description-textarea').value;
             
             // اعتبارسنجی
             if (!isValidDate(date)) {
@@ -1103,10 +1103,10 @@
             showMessage('payment-message', 'تراکنش با موفقیت ثبت شد', 'success');
             
             // پاک کردن فرم
-            document.getElementById('payment-date').value = '';
+            document.getElementById('payment-date-input').value = '';
             paymentCustomerSelect.value = '';
-            document.getElementById('payment-amount').value = '';
-            document.getElementById('payment-description').value = '';
+            document.getElementById('payment-amount-input').value = '';
+            document.getElementById('payment-description-textarea').value = '';
         });
         
         // ارسال اطلاعات پرداخت/دریافت به فرم گوگل
@@ -1126,10 +1126,10 @@
         
         // ثبت طرف حساب جدید
         saveCustomerBtn.addEventListener('click', () => {
-            const name = document.getElementById('customer-name').value;
-            const phone = document.getElementById('customer-phone').value;
-            const province = document.getElementById('customer-province').value;
-            const address = document.getElementById('customer-address').value;
+            const name = document.getElementById('customer-name-input').value;
+            const phone = document.getElementById('customer-phone-input').value;
+            const province = document.getElementById('customer-province-input').value;
+            const address = document.getElementById('customer-address-input').value;
             
             if (!name) {
                 showMessage('customer-message', 'لطفا نام طرف حساب را وارد کنید', 'error');
@@ -1154,10 +1154,10 @@
             loadCustomers();
             
             // پاک کردن فرم
-            document.getElementById('customer-name').value = '';
-            document.getElementById('customer-phone').value = '';
-            document.getElementById('customer-province').value = '';
-            document.getElementById('customer-address').value = '';
+            document.getElementById('customer-name-input').value = '';
+            document.getElementById('customer-phone-input').value = '';
+            document.getElementById('customer-province-input').value = '';
+            document.getElementById('customer-address-input').value = '';
         });
         
         // ارسال اطلاعات طرف حساب به فرم گوگل
@@ -1209,7 +1209,7 @@
         // تولید گزارش
         generateReportBtn.addEventListener('click', () => {
             const customerId = reportCustomerSelect.value ? parseInt(reportCustomerSelect.value) : null;
-            const reportType = document.getElementById('report-type').value;
+            const reportType = document.getElementById('report-type-select').value;
             
             let resultHTML = '';
             
