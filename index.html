@@ -671,7 +671,7 @@
                 <div class="col">
                     <div class="input-group">
                         <label for="customer-phone-input">تلفن</label>
-                        <input type="tel" id="customer-phone-input" pattern="[0-9]{11}" placeholder="09123456789" maxlength="11">
+                        <input type="tel" id="customer-phone-input" pattern="[0-9]{11}" placeholder="شماره را به صورت ...09 وارد نمایید" maxlength="11">
                     </div>
                 </div>
             </div>
@@ -1027,7 +1027,7 @@ addItemBtn.addEventListener('click', () => {
         
         // ارسال فاکتور فروش به فرم گوگل
         function submitSaleInvoiceToGoogle(invoice) {
-            const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSd0WvDfwSpvSCYEjRz2F4Wnm3OX2X6xiHeb7tCmBBfkwjQxUA/viewform';
+            const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSd0WvDfwSpvSCYEjRz2F4Wnm3OX2X6xiHeb7tCmBBfkwjQxUA/formResponse';
             
             // ارسال هر آیتم به صورت جداگانه
             invoice.items.forEach(item => {
