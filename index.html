@@ -18,6 +18,9 @@
             min-height: 100vh;
             padding: 20px;
             color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
         .container {
@@ -146,6 +149,11 @@
             color: white;
         }
         
+        .btn-success {
+            background: linear-gradient(to right, #00b09b, #96c93d);
+            color: white;
+        }
+        
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 10px rgba(26, 41, 128, 0.3);
@@ -249,6 +257,68 @@
             border-bottom: 2px solid #1a2980;
         }
         
+        .invoice-type-btns {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .invoice-type-btn {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .invoice-type-btn.active {
+            border-color: #1a2980;
+            background-color: rgba(26, 41, 128, 0.1);
+        }
+        
+        .payment-type-btns {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .payment-type-btn {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .payment-type-btn.active {
+            border-color: #1a2980;
+            background-color: rgba(26, 41, 128, 0.1);
+        }
+        
+        .login-container {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        .login-form {
+            margin-top: 30px;
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
         @media (max-width: 768px) {
             .row {
                 flex-direction: column;
@@ -262,6 +332,10 @@
                 flex: 1;
                 min-width: 120px;
                 text-align: center;
+            }
+            
+            .invoice-type-btns, .payment-type-btns {
+                flex-direction: column;
             }
         }
         
@@ -284,9 +358,32 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- صفحه ورود -->
+    <div id="login-page" class="login-container">
+        <h2><i class="fas fa-lock"></i> ورود به سیستم حسابداری</h2>
+        <div class="login-form">
+            <div class="input-group">
+                <label for="username">نام کاربری</label>
+                <input type="text" id="username" placeholder="نام کاربری">
+            </div>
+            <div class="input-group">
+                <label for="password">رمز عبور</label>
+                <input type="password" id="password" placeholder="رمز عبور">
+            </div>
+            <button id="login-btn" class="btn btn-primary login-btn">
+                <i class="fas fa-sign-in-alt"></i> ورود به سیستم
+            </button>
+            <div id="login-message" class="status-message"></div>
+        </div>
+    </div>
+
+    <!-- صفحه اصلی برنامه (در ابتدا مخفی است) -->
+    <div id="main-app" class="container" style="display: none;">
         <div class="header">
             <h1><i class="fas fa-calculator"></i> نرم افزار حسابداری</h1>
+            <button id="logout-btn" class="btn btn-danger" style="position: absolute; left: 20px; top: 20px;">
+                <i class="fas fa-sign-out-alt"></i> خروج
+            </button>
         </div>
         
         <div class="tabs">
@@ -298,6 +395,15 @@
         
         <div class="tab-content active" id="invoice-tab">
             <div class="section-title">ثبت فاکتور جدید</div>
+            
+            <div class="invoice-type-btns">
+                <div class="invoice-type-btn active" data-type="sale">
+                    <i class="fas fa-file-invoice-dollar"></i> فاکتور فروش
+                </div>
+                <div class="invoice-type-btn" data-type="purchase">
+                    <i class="fas fa-shopping-cart"></i> فاکتور خرید
+                </div>
+            </div>
             
             <div class="row">
                 <div class="col">
@@ -340,8 +446,6 @@
                         <select id="item-unit">
                             <option value="عدد">عدد</option>
                             <option value="کارتن">کارتن</option>
-                            <option value="متر">متر</option>
-                            <option value="کیلوگرم">کیلوگرم</option>
                         </select>
                     </div>
                 </div>
@@ -375,15 +479,16 @@
                 </table>
             </div>
             
+            <div class="payment-type-btns">
+                <div class="payment-type-btn active" data-type="cash">
+                    <i class="fas fa-money-bill-wave"></i> نقدی
+                </div>
+                <div class="payment-type-btn" data-type="installment">
+                    <i class="fas fa-credit-card"></i> اقساطی
+                </div>
+            </div>
+            
             <div class="invoice-summary">
-                <div class="summary-row">
-                    <span>جمع کل:</span>
-                    <span id="subtotal">0 تومان</span>
-                </div>
-                <div class="summary-row">
-                    <span>مالیات (9%):</span>
-                    <span id="tax">0 تومان</span>
-                </div>
                 <div class="summary-row">
                     <span>مبلغ قابل پرداخت:</span>
                     <span id="total">0 تومان</span>
@@ -432,6 +537,15 @@
                         <label for="payment-amount">مبلغ (تومان)</label>
                         <input type="number" id="payment-amount" min="0" placeholder="مبلغ تراکنش">
                     </div>
+                </div>
+            </div>
+            
+            <div class="payment-type-btns">
+                <div class="payment-type-btn active" data-type="cash">
+                    <i class="fas fa-money-bill-wave"></i> نقدی
+                </div>
+                <div class="payment-type-btn" data-type="installment">
+                    <i class="fas fa-credit-card"></i> اقساطی
                 </div>
             </div>
             
@@ -500,9 +614,19 @@
                 </div>
             </div>
             
-            <div class="input-group">
-                <label for="customer-address">آدرس</label>
-                <textarea id="customer-address" rows="2" placeholder="آدرس طرف حساب"></textarea>
+            <div class="row">
+                <div class="col">
+                    <div class="input-group">
+                        <label for="customer-province">استان</label>
+                        <input type="text" id="customer-province" placeholder="استان">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="input-group">
+                        <label for="customer-address">آدرس</label>
+                        <input type="text" id="customer-address" placeholder="آدرس طرف حساب">
+                    </div>
+                </div>
             </div>
             
             <button id="save-customer" class="btn btn-primary">
@@ -516,6 +640,7 @@
                     <tr>
                         <th>نام</th>
                         <th>تلفن</th>
+                        <th>استان</th>
                         <th>آدرس</th>
                         <th>عملیات</th>
                     </tr>
@@ -529,8 +654,7 @@
         </div>
         
         <div class="dev-credit">
-            Dev by: Snapp North Zone Sales HQ<br>
-            تیم فروش شمال کشور 💎
+            Dev by: Amirmohammad.Aslani<br>
         </div>
     </div>
 
@@ -541,6 +665,8 @@
         let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
         
         // المنت های صفحه
+        const loginPage = document.getElementById('login-page');
+        const mainApp = document.getElementById('main-app');
         const tabs = document.querySelectorAll('.tab');
         const tabContents = document.querySelectorAll('.tab-content');
         const invoiceCustomerSelect = document.getElementById('invoice-customer');
@@ -553,9 +679,23 @@
         const saveCustomerBtn = document.getElementById('save-customer');
         const generateReportBtn = document.getElementById('generate-report');
         const customersTable = document.getElementById('customers-table').querySelector('tbody');
+        const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const invoiceTypeBtns = document.querySelectorAll('.invoice-type-btn');
+        const paymentTypeBtns = document.querySelectorAll('.payment-type-btn');
         
         // متغیرهای موقت
         let currentItems = [];
+        let currentInvoiceType = 'sale';
+        let currentPaymentType = 'cash';
+        let isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        
+        // بررسی وضعیت ورود
+        if (isLoggedIn) {
+            showMainApp();
+        } else {
+            showLoginPage();
+        }
         
         // تغییر تب‌ها
         tabs.forEach(tab => {
@@ -573,6 +713,59 @@
                 }
             });
         });
+        
+        // انتخاب نوع فاکتور
+        invoiceTypeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                invoiceTypeBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentInvoiceType = btn.getAttribute('data-type');
+            });
+        });
+        
+        // انتخاب نوع پرداخت
+        paymentTypeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const parent = btn.closest('.payment-type-btns');
+                parent.querySelectorAll('.payment-type-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentPaymentType = btn.getAttribute('data-type');
+            });
+        });
+        
+        // ورود به سیستم
+        loginBtn.addEventListener('click', () => {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username === 'مدیریت' && password === '11111') {
+                localStorage.setItem('isLoggedIn', 'true');
+                isLoggedIn = true;
+                showMainApp();
+            } else {
+                showMessage('login-message', 'نام کاربری یا رمز عبور اشتباه است', 'error');
+            }
+        });
+        
+        // خروج از سیستم
+        logoutBtn.addEventListener('click', () => {
+            localStorage.setItem('isLoggedIn', 'false');
+            isLoggedIn = false;
+            showLoginPage();
+        });
+        
+        // نمایش صفحه اصلی
+        function showMainApp() {
+            loginPage.style.display = 'none';
+            mainApp.style.display = 'block';
+            loadCustomers();
+        }
+        
+        // نمایش صفحه ورود
+        function showLoginPage() {
+            loginPage.style.display = 'block';
+            mainApp.style.display = 'none';
+        }
         
         // بارگذاری طرف حساب ها در dropdownها
         function loadCustomers() {
@@ -617,6 +810,7 @@
                 row.innerHTML = `
                     <td>${customer.name}</td>
                     <td>${customer.phone || '-'}</td>
+                    <td>${customer.province || '-'}</td>
                     <td>${customer.address || '-'}</td>
                     <td>
                         <button class="btn btn-danger" onclick="deleteCustomer(${customer.id})">
@@ -694,12 +888,8 @@
         
         // محاسبه جمع کل فاکتور
         function calculateTotals() {
-            const subtotal = currentItems.reduce((sum, item) => sum + item.total, 0);
-            const tax = Math.round(subtotal * 0.09);
-            const total = subtotal + tax;
+            const total = currentItems.reduce((sum, item) => sum + item.total, 0);
             
-            document.getElementById('subtotal').textContent = `${subtotal.toLocaleString()} تومان`;
-            document.getElementById('tax').textContent = `${tax.toLocaleString()} تومان`;
             document.getElementById('total').textContent = `${total.toLocaleString()} تومان`;
         }
         
@@ -724,17 +914,15 @@
                 return;
             }
             
-            const subtotal = currentItems.reduce((sum, item) => sum + item.total, 0);
-            const tax = Math.round(subtotal * 0.09);
-            const total = subtotal + tax;
+            const total = currentItems.reduce((sum, item) => sum + item.total, 0);
             
             const invoice = {
                 id: Date.now(),
                 date,
                 customerId,
+                type: currentInvoiceType,
+                paymentType: currentPaymentType,
                 items: [...currentItems],
-                subtotal,
-                tax,
                 total
             };
             
@@ -780,6 +968,7 @@
                 date,
                 customerId,
                 type,
+                paymentType: currentPaymentType,
                 amount,
                 description
             };
@@ -800,6 +989,7 @@
         saveCustomerBtn.addEventListener('click', () => {
             const name = document.getElementById('customer-name').value;
             const phone = document.getElementById('customer-phone').value;
+            const province = document.getElementById('customer-province').value;
             const address = document.getElementById('customer-address').value;
             
             if (!name) {
@@ -811,11 +1001,15 @@
                 id: Date.now(),
                 name,
                 phone,
+                province,
                 address
             };
             
             customers.push(customer);
             localStorage.setItem('customers', JSON.stringify(customers));
+            
+            // ارسال اطلاعات به فرم گوگل
+            submitToGoogleForm(customer);
             
             showMessage('customer-message', 'طرف حساب با موفقیت ثبت شد', 'success');
             loadCustomers();
@@ -823,8 +1017,32 @@
             // پاک کردن فرم
             document.getElementById('customer-name').value = '';
             document.getElementById('customer-phone').value = '';
+            document.getElementById('customer-province').value = '';
             document.getElementById('customer-address').value = '';
         });
+        
+        // ارسال اطلاعات به فرم گوگل
+        function submitToGoogleForm(customer) {
+            const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdMZcIjqDaDduJEwtDq8xutdePYyQeGwPsI5cggL86jmaJhhQ/formResponse';
+            
+            const params = new URLSearchParams();
+            params.append('entry.1034418495', customer.name); // نام طرف حساب
+            params.append('entry.192461234', customer.phone || ''); // تلفن
+            params.append('entry.990796832', customer.province || ''); // استان
+            params.append('entry.2104411525', customer.address || ''); // آدرس
+            
+            // ارسال درخواست به فرم گوگل
+            fetch(formUrl, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: params.toString()
+            }).catch(error => {
+                console.error('خطا در ارسال به فرم گوگل:', error);
+            });
+        }
         
         // حذف طرف حساب
         function deleteCustomer(customerId) {
@@ -885,8 +1103,8 @@
                         <thead>
                             <tr>
                                 <th>تاریخ</th>
-                                <th>مبلغ فاکتور</th>
-                                <th>مالیات</th>
+                                <th>نوع فاکتور</th>
+                                <th>نوع پرداخت</th>
                                 <th>جمع کل</th>
                             </tr>
                         </thead>
@@ -897,8 +1115,8 @@
                     reportHTML += `
                         <tr>
                             <td>${invoice.date}</td>
-                            <td>${invoice.subtotal.toLocaleString()} تومان</td>
-                            <td>${invoice.tax.toLocaleString()} تومان</td>
+                            <td>${invoice.type === 'sale' ? 'فروش' : 'خرید'}</td>
+                            <td>${invoice.paymentType === 'cash' ? 'نقدی' : 'اقساطی'}</td>
                             <td>${invoice.total.toLocaleString()} تومان</td>
                         </tr>
                     `;
@@ -916,6 +1134,7 @@
                             <tr>
                                 <th>تاریخ</th>
                                 <th>نوع</th>
+                                <th>نوع پرداخت</th>
                                 <th>مبلغ</th>
                                 <th>توضیحات</th>
                             </tr>
@@ -928,6 +1147,7 @@
                         <tr>
                             <td>${transaction.date}</td>
                             <td>${transaction.type === 'receipt' ? 'دریافت' : 'پرداخت'}</td>
+                            <td>${transaction.paymentType === 'cash' ? 'نقدی' : 'اقساطی'}</td>
                             <td>${transaction.amount.toLocaleString()} تومان</td>
                             <td>${transaction.description || '-'}</td>
                         </tr>
@@ -954,8 +1174,8 @@
                         <tr>
                             <th>تاریخ</th>
                             <th>طرف حساب</th>
-                            <th>مبلغ فاکتور</th>
-                            <th>مالیات</th>
+                            <th>نوع فاکتور</th>
+                            <th>نوع پرداخت</th>
                             <th>جمع کل</th>
                         </tr>
                     </thead>
@@ -970,8 +1190,8 @@
                     <tr>
                         <td>${invoice.date}</td>
                         <td>${customerName}</td>
-                        <td>${invoice.subtotal.toLocaleString()} تومان</td>
-                        <td>${invoice.tax.toLocaleString()} تومان</td>
+                        <td>${invoice.type === 'sale' ? 'فروش' : 'خرید'}</td>
+                        <td>${invoice.paymentType === 'cash' ? 'نقدی' : 'اقساطی'}</td>
                         <td>${invoice.total.toLocaleString()} تومان</td>
                     </tr>
                 `;
@@ -997,6 +1217,7 @@
                             <th>تاریخ</th>
                             <th>طرف حساب</th>
                             <th>نوع</th>
+                            <th>نوع پرداخت</th>
                             <th>مبلغ</th>
                             <th>توضیحات</th>
                         </tr>
@@ -1013,6 +1234,7 @@
                         <td>${transaction.date}</td>
                         <td>${customerName}</td>
                         <td>${transaction.type === 'receipt' ? 'دریافت' : 'پرداخت'}</td>
+                        <td>${transaction.paymentType === 'cash' ? 'نقدی' : 'اقساطی'}</td>
                         <td>${transaction.amount.toLocaleString()} تومان</td>
                         <td>${transaction.description || '-'}</td>
                     </tr>
@@ -1047,8 +1269,10 @@
         
         // مقداردهی اولیه
         document.addEventListener('DOMContentLoaded', () => {
-            loadCustomers();
-            loadReportCustomers();
+            if (isLoggedIn) {
+                loadCustomers();
+                loadReportCustomers();
+            }
         });
     </script>
 </body>
