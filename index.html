@@ -1030,7 +1030,6 @@
                 params.append('entry.725136183', item.unit); // واحد
                 params.append('entry.1176776363', item.price); // قیمت واحد
                 params.append('entry.560795626', invoice.paymentType === 'cash' ? 'نقدی' : 'اقساطی'); // نوع پرداخت
-                params.append('entry.228424410', invoice.username); // نام کاربری
                 
                 fetch(formUrl, {
                     method: 'POST',
