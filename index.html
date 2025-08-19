@@ -493,14 +493,14 @@
             
             <div class="row">
                 <div class="col">
-                    <div class="input-group">
-                        <label for="item-name-select">نام کالا/خدمت</label>
-                        <select id="item-name-select">
-                            <option value="">انتخاب کالا</option>
-                            <option value="بی دی انسولین 0.5ml">بی دی انسولین 0.5ml</option>
-                            <option value="بی دی انسولین 1ml">بی دی انسولین 1ml</option>
-                        </select>
-                    </div>
+                   <div class="input-group">
+    <label for="item-name-select">نام کالا/خدمت</label>
+    <select id="item-name-select" required>
+        <option value="" disabled selected>انتخاب کالا</option>
+        <option value="بی دی انسولین 0.5ml">بی دی انسولین 0.5ml</option>
+        <option value="بی دی انسولین 1ml">بی دی انسولین 1ml</option>
+    </select>
+</div>
                 </div>
                 <div class="col">
                     <div class="input-group">
@@ -679,14 +679,14 @@
             <div class="row">
                 <div class="col">
                     <div class="input-group">
-                        <label for="customer-province-select">استان</label>
-                        <select id="customer-province-select">
-                            <option value="">انتخاب استان</option>
-                            <option value="تهران">تهران</option>
-                            <option value="کرج">کرج</option>
-                            <option value="مازندران">مازندران</option>
-                        </select>
-                    </div>
+    <label for="customer-province-select">استان</label>
+    <select id="customer-province-select" required>
+        <option value="" disabled selected>انتخاب استان</option>
+        <option value="تهران">تهران</option>
+        <option value="کرج">کرج</option>
+        <option value="مازندران">مازندران</option>
+    </select>
+</div>
                 </div>
                 <div class="col">
                     <div class="input-group">
@@ -900,16 +900,16 @@
         }
         
         // افزودن آیتم به فاکتور
-        addItemBtn.addEventListener('click', () => {
-            const name = document.getElementById('item-name-select').value;
-            const quantity = parseInt(document.getElementById('item-quantity-input').value);
-            const unit = document.getElementById('item-unit-select').value;
-            const price = parseInt(document.getElementById('item-price-input').value);
-            
-            if (!name || !quantity || !price) {
-                showMessage('invoice-message', 'لطفا اطلاعات آیتم را کامل وارد کنید', 'error');
-                return;
-            }
+addItemBtn.addEventListener('click', () => {
+    const name = document.getElementById('item-name-select').value;
+    const quantity = parseInt(document.getElementById('item-quantity-input').value);
+    const unit = document.getElementById('item-unit-select').value;
+    const price = parseInt(document.getElementById('item-price-input').value);
+    
+    if (!name || !quantity || !price) {
+        showMessage('invoice-message', 'لطفا اطلاعات آیتم را کامل وارد کنید', 'error');
+        return;
+    }
             
             const total = quantity * price;
             const item = {
@@ -1134,16 +1134,21 @@
         }
         
         // ثبت طرف حساب جدید
-        saveCustomerBtn.addEventListener('click', () => {
-            const name = document.getElementById('customer-name-input').value;
-            const phone = document.getElementById('customer-phone-input').value;
-            const province = document.getElementById('customer-province-select').value;
-            const address = document.getElementById('customer-address-input').value;
-            
-            if (!name) {
-                showMessage('customer-message', 'لطفا نام طرف حساب را وارد کنید', 'error');
-                return;
-            }
+ saveCustomerBtn.addEventListener('click', () => {
+    const name = document.getElementById('customer-name-input').value;
+    const phone = document.getElementById('customer-phone-input').value;
+    const province = document.getElementById('customer-province-select').value;
+    const address = document.getElementById('customer-address-input').value;
+    
+    if (!name) {
+        showMessage('customer-message', 'لطفا نام طرف حساب را وارد کنید', 'error');
+        return;
+    }
+                // اعتبارسنجی استان
+    if (!province) {
+        showMessage('customer-message', 'لطفا استان را انتخاب کنید', 'error');
+        return;
+    }
             
             // اعتبارسنجی شماره تلفن
             if (phone && !/^\d{11}$/.test(phone)) {
