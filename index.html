@@ -494,8 +494,12 @@
             <div class="row">
                 <div class="col">
                     <div class="input-group">
-                        <label for="item-name-input">نام کالا/خدمت</label>
-                        <input type="text" id="item-name-input" placeholder="نام آیتم">
+                        <label for="item-name-select">نام کالا/خدمت</label>
+                        <select id="item-name-select">
+                            <option value="">انتخاب کالا</option>
+                            <option value="بی دی انسولین 0.5ml">بی دی انسولین 0.5ml</option>
+                            <option value="بی دی انسولین 1ml">بی دی انسولین 1ml</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col">
@@ -667,7 +671,7 @@
                 <div class="col">
                     <div class="input-group">
                         <label for="customer-phone-input">تلفن</label>
-                        <input type="text" id="customer-phone-input" placeholder="شماره تلفن">
+                        <input type="tel" id="customer-phone-input" pattern="[0-9]{11}" placeholder="09123456789" maxlength="11">
                     </div>
                 </div>
             </div>
@@ -675,8 +679,13 @@
             <div class="row">
                 <div class="col">
                     <div class="input-group">
-                        <label for="customer-province-input">استان</label>
-                        <input type="text" id="customer-province-input" placeholder="استان">
+                        <label for="customer-province-select">استان</label>
+                        <select id="customer-province-select">
+                            <option value="">انتخاب استان</option>
+                            <option value="تهران">تهران</option>
+                            <option value="کرج">کرج</option>
+                            <option value="مازندران">مازندران</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col">
@@ -892,7 +901,7 @@
         
         // افزودن آیتم به فاکتور
         addItemBtn.addEventListener('click', () => {
-            const name = document.getElementById('item-name-input').value;
+            const name = document.getElementById('item-name-select').value;
             const quantity = parseInt(document.getElementById('item-quantity-input').value);
             const unit = document.getElementById('item-unit-select').value;
             const price = parseInt(document.getElementById('item-price-input').value);
@@ -917,7 +926,7 @@
             calculateTotals();
             
             // پاک کردن فیلدها
-            document.getElementById('item-name-input').value = '';
+            document.getElementById('item-name-select').value = '';
             document.getElementById('item-quantity-input').value = '1';
             document.getElementById('item-price-input').value = '';
         });
@@ -946,7 +955,7 @@
             });
         }
         
-        // حذف آیتم از فاکتور
+        // حذف آیتم از فакتور
         function removeItem(itemId) {
             currentItems = currentItems.filter(item => item.id !== itemId);
             renderItemsTable();
@@ -1018,7 +1027,7 @@
         
         // ارسال فاکتور فروش به فرم گوگل
         function submitSaleInvoiceToGoogle(invoice) {
-            const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdKhpMU4KDf-GdX5V1L-_oC2Kc1Dqfx9Az38gb6HMuc8dB0Bg/formResponse';
+            const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdKhpMU4KDf-GdX5V1L-_oC2Kc1Dqfx9Az38gb6HMuc8dB0Bg/viewform?usp=dialog';
             
             // ارسال هر آیتم به صورت جداگانه
             invoice.items.forEach(item => {
@@ -1128,11 +1137,17 @@
         saveCustomerBtn.addEventListener('click', () => {
             const name = document.getElementById('customer-name-input').value;
             const phone = document.getElementById('customer-phone-input').value;
-            const province = document.getElementById('customer-province-input').value;
+            const province = document.getElementById('customer-province-select').value;
             const address = document.getElementById('customer-address-input').value;
             
             if (!name) {
                 showMessage('customer-message', 'لطفا نام طرف حساب را وارد کنید', 'error');
+                return;
+            }
+            
+            // اعتبارسنجی شماره تلفن
+            if (phone && !/^\d{11}$/.test(phone)) {
+                showMessage('customer-message', 'شماره تلفن باید 11 رقمی باشد', 'error');
                 return;
             }
             
@@ -1156,7 +1171,7 @@
             // پاک کردن فرم
             document.getElementById('customer-name-input').value = '';
             document.getElementById('customer-phone-input').value = '';
-            document.getElementById('customer-province-input').value = '';
+            document.getElementById('customer-province-select').value = '';
             document.getElementById('customer-address-input').value = '';
         });
         
