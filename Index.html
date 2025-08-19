@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نرم افزار حسابداری</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2980 0%, #26d0ce 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
+            width: 100%;
+            max-width: 1200px;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .header {
+            background: linear-gradient(to right, #1a2980, #26d0ce);
+            color: white;
+            text-align: center;
+            padding: 25px 20px;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+        
+        .tabs {
+            display: flex;
+            background-color: #f1f2f6;
+            border-bottom: 2px solid #ddd;
+        }
+        
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab.active {
+            background-color: white;
+            border-bottom: 3px solid #1a2980;
+            color: #1a2980;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .input-group input, .input-group select, .input-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background-color: white;
+        }
+        
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+            border-color: #1a2980;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(26, 41, 128, 0.2);
+        }
+        
+        .row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .col {
+            flex: 1;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, #1a2980, #26d0ce);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: #f1f2f6;
+            color: #2f3542;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(to right, #e74c3c, #e67e22);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(26, 41, 128, 0.3);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: right;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #1a2980;
+            color: white;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .invoice-items {
+            margin: 20px 0;
+        }
+        
+        .invoice-summary {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .summary-row:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            font-size: 18px;
+            color: #1a2980;
+        }
+        
+        .report-filters {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .customer-balance {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            margin: 20px 0;
+            background: linear-gradient(to right, #1a2980, #26d0ce);
+            color: white;
+            border-radius: 8px;
+        }
+        
+        .status-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+        }
+        
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a2980;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #1a2980;
+        }
+        
+        @media (max-width: 768px) {
+            .row {
+                flex-direction: column;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+            
+            .tab {
+                flex: 1;
+                min-width: 120px;
+                text-align: center;
+            }
+        }
+        
+        .dev-credit {
+            text-align: center;
+            direction: ltr;
+            font-size: 14px;
+            margin: 15px auto 0;
+            padding: 10px 20px;
+            background: rgba(38, 208, 206, 0.15);
+            border-radius: 10px;
+            color: #1a2980;
+            font-weight: 600;
+            border: 1px solid rgba(26, 41, 128, 0.2);
+            display: block;
+            width: fit-content;
+            max-width: 90%;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-calculator"></i> نرم افزار حسابداری</h1>
+        </div>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="invoice">ثبت فاکتور</div>
+            <div class="tab" data-tab="payment">پرداخت و دریافت</div>
+            <div class="tab" data-tab="reports">گزارشات</div>
+            <div class="tab" data-tab="customers">طرف حساب ها</div>
+        </div>
+        
+        <div class="tab-content active" id="invoice-tab">
+            <div class="section-title">ثبت فاکتور جدید</div>
+            
+            <div class="row">
+                <div class="col">
+                    <div class="input-group">
+                        <label for="invoice-date">تاریخ شمسی (YYYY/MM/DD)</label>
+                        <input type="text" id="invoice-date" placeholder="1403/03/15">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="input-group">
+                        <label for="invoice-customer">طرف حساب</label>
+                        <select id="invoice-customer">
+                            <option value="">انتخاب طرف حساب</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-title">آیتم های فاکتور</div>
+            
+            <div class="row">
+                <div class="col">
+                    <div class="input-group">
+                        <label for="item-name">نام کالا/خدمت</label>
+                        <input type="text" id="item-name" placeholder="نام آیتم">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="input-group">
+                        <label for="item-quantity">تعداد</label>
+                        <input type="number" id="item-quantity" min="1" value="1">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col">
+                    <div class="input-group">
+                        <label for="item-unit">واحد اندازه گیری</label>
+                        <select id="item-unit">
+                            <option value="عدد">عدد</option>
+                            <option value="کارتن">کارتن</option>
+                            <option value="متر">متر</option>
+                            <option value="کیلوگرم">کیلوگرم</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="input-group">
+                        <label for="item-price">قیمت واحد (تومان)</label>
+                        <input type="number" id="item-price" min="0" placeholder="قیمت واحد">
+                    </div>
+                </div>
+            </div>
+            
+            <button id="add-item" class="btn btn-primary">
+                <i class="fas fa-plus"></i> افزودن آیتم
+            </button>
+            
+            <div class="invoice-items">
+                <table id="items-table">
+                    <thead>
+                        <tr>
+                            <th>نام کالا</th>
+                            <th>تعداد</th>
+                            <th>واحد</th>
+                            <th>قیمت واحد</th>
+                            <th>قیمت کل</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- آیتم ها اینجا نمایش داده می شوند -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="invoice-summary">
+                <div class="summary-row">
+                    <span>جمع کل:</span>
+                    <span id="subtotal">0 تومان</span>
+                </div>
+                <div class="summary-row">
+                    <span>مالیات (9%):</span>
+                    <span id="tax">0 تومان</span>
+                </div>
+                <div class="summary-row">
+                    <span>مبلغ قابل پرداخت:</span>
+                    <span id="total">0 تومان</span>
+                </div>
+            </div>
+            
+            <button id="save-invoice" class="btn btn-primary" style="width: 100%; padding: 15px;">
+                <i class="fas fa-save"></i> ثبت فاکتور
+            </button>
+            
+            <div id="invoice-message" class="status-message"></div>
+        </div>
+        
+        <div class="tab-content" id="payment-tab">
+            <div class="section-title">ثبت پرداخت یا دریافت</div>
+            
+            <div class="row">
+                <div class="col">
+                    <div class="input-group">
+                        <label for="payment-date">تاریخ شمسی (YYYY/MM/DD)</label>
+                        <input type="text" id="payment-date" placeholder="1403/03/15">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="input-group">
+                        <label for="payment-customer">طرف حساب</label>
+                        <select id="payment-customer">
+                            <option value="">انتخاب طرف حساب</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col">
+                    <div class="input-group">
+                        <label for="payment-type">نوع تراکنش</label>
+                        <select id="payment-type">
+                            <option value="receipt">دریافت</option>
+                            <option value="payment">پرداخت</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="input-group">
+                        <label for="payment-amount">مبلغ (تومان)</label>
+                        <input type="number" id="payment-amount" min="0" placeholder="مبلغ تراکنش">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="payment-description">توضیحات</label>
+                <textarea id="payment-description" rows="3" placeholder="توضیحات تراکنش"></textarea>
+            </div>
+            
+            <button id="save-payment" class="btn btn-primary" style="width: 100%; padding: 15px;">
+                <i class="fas fa-save"></i> ثبت تراکنش
+            </button>
+            
+            <div id="payment-message" class="status-message"></div>
+        </div>
+        
+        <div class="tab-content" id="reports-tab">
+            <div class="section-title">گزارشات حسابداری</div>
+            
+            <div class="report-filters">
+                <div class="row">
+                    <div class="col">
+                        <div class="input-group">
+                            <label for="report-customer">طرف حساب</label>
+                            <select id="report-customer">
+                                <option value="">همه طرف حساب ها</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-group">
+                            <label for="report-type">نوع گزارش</label>
+                            <select id="report-type">
+                                <option value="balance">مانده حساب</option>
+                                <option value="invoices">فاکتورها</option>
+                                <option value="transactions">تراکنش ها</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <button id="generate-report" class="btn btn-primary">
+                    <i class="fas fa-chart-bar"></i> تولید گزارش
+                </button>
+            </div>
+            
+            <div id="report-result">
+                <!-- نتایج گزارش اینجا نمایش داده می شود -->
+            </div>
+        </div>
+        
+        <div class="tab-content" id="customers-tab">
+            <div class="section-title">مدیریت طرف حساب ها</div>
+            
+            <div class="row">
+                <div class="col">
+                    <div class="input-group">
+                        <label for="customer-name">نام طرف حساب</label>
+                        <input type="text" id="customer-name" placeholder="نام کامل">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="input-group">
+                        <label for="customer-phone">تلفن</label>
+                        <input type="text" id="customer-phone" placeholder="شماره تلفن">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label for="customer-address">آدرس</label>
+                <textarea id="customer-address" rows="2" placeholder="آدرس طرف حساب"></textarea>
+            </div>
+            
+            <button id="save-customer" class="btn btn-primary">
+                <i class="fas fa-save"></i> ثبت طرف حساب
+            </button>
+            
+            <div class="section-title" style="margin-top: 30px;">لیست طرف حساب ها</div>
+            
+            <table id="customers-table">
+                <thead>
+                    <tr>
+                        <th>نام</th>
+                        <th>تلفن</th>
+                        <th>آدرس</th>
+                        <th>عملیات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- طرف حساب ها اینجا نمایش داده می شوند -->
+                </tbody>
+            </table>
+            
+            <div id="customer-message" class="status-message"></div>
+        </div>
+        
+        <div class="dev-credit">
+            Dev by: Snapp North Zone Sales HQ<br>
+            تیم فروش شمال کشور 💎
+        </div>
+    </div>
+
+    <script>
+        // ذخیره سازی داده‌ها
+        let customers = JSON.parse(localStorage.getItem('customers')) || [];
+        let invoices = JSON.parse(localStorage.getItem('invoices')) || [];
+        let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+        
+        // المنت های صفحه
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const invoiceCustomerSelect = document.getElementById('invoice-customer');
+        const paymentCustomerSelect = document.getElementById('payment-customer');
+        const reportCustomerSelect = document.getElementById('report-customer');
+        const itemsTable = document.getElementById('items-table').querySelector('tbody');
+        const addItemBtn = document.getElementById('add-item');
+        const saveInvoiceBtn = document.getElementById('save-invoice');
+        const savePaymentBtn = document.getElementById('save-payment');
+        const saveCustomerBtn = document.getElementById('save-customer');
+        const generateReportBtn = document.getElementById('generate-report');
+        const customersTable = document.getElementById('customers-table').querySelector('tbody');
+        
+        // متغیرهای موقت
+        let currentItems = [];
+        
+        // تغییر تب‌ها
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(tc => tc.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+                
+                if (tabId === 'reports') {
+                    loadReportCustomers();
+                }
+            });
+        });
+        
+        // بارگذاری طرف حساب ها در dropdownها
+        function loadCustomers() {
+            // پاک کردن dropdownها
+            [invoiceCustomerSelect, paymentCustomerSelect].forEach(select => {
+                select.innerHTML = '<option value="">انتخاب طرف حساب</option>';
+            });
+            
+            // پر کردن dropdownها
+            customers.forEach(customer => {
+                [invoiceCustomerSelect, paymentCustomerSelect].forEach(select => {
+                    const option = document.createElement('option');
+                    option.value = customer.id;
+                    option.textContent = customer.name;
+                    select.appendChild(option);
+                });
+            });
+            
+            // بارگذاری در جدول طرف حساب ها
+            renderCustomersTable();
+        }
+        
+        // بارگذاری طرف حساب ها در گزارشات
+        function loadReportCustomers() {
+            reportCustomerSelect.innerHTML = '<option value="">همه طرف حساب ها</option>';
+            
+            customers.forEach(customer => {
+                const option = document.createElement('option');
+                option.value = customer.id;
+                option.textContent = customer.name;
+                reportCustomerSelect.appendChild(option);
+            });
+        }
+        
+        // نمایش طرف حساب ها در جدول
+        function renderCustomersTable() {
+            customersTable.innerHTML = '';
+            
+            customers.forEach(customer => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${customer.name}</td>
+                    <td>${customer.phone || '-'}</td>
+                    <td>${customer.address || '-'}</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="deleteCustomer(${customer.id})">
+                            <i class="fas fa-trash"></i> حذف
+                        </button>
+                    </td>
+                `;
+                
+                customersTable.appendChild(row);
+            });
+        }
+        
+        // افزودن آیتم به فاکتور
+        addItemBtn.addEventListener('click', () => {
+            const name = document.getElementById('item-name').value;
+            const quantity = parseInt(document.getElementById('item-quantity').value);
+            const unit = document.getElementById('item-unit').value;
+            const price = parseInt(document.getElementById('item-price').value);
+            
+            if (!name || !quantity || !price) {
+                showMessage('invoice-message', 'لطفا اطلاعات آیتم را کامل وارد کنید', 'error');
+                return;
+            }
+            
+            const total = quantity * price;
+            const item = {
+                id: Date.now(),
+                name,
+                quantity,
+                unit,
+                price,
+                total
+            };
+            
+            currentItems.push(item);
+            renderItemsTable();
+            calculateTotals();
+            
+            // پاک کردن فیلدها
+            document.getElementById('item-name').value = '';
+            document.getElementById('item-quantity').value = '1';
+            document.getElementById('item-price').value = '';
+        });
+        
+        // نمایش آیتم های فاکتور در جدول
+        function renderItemsTable() {
+            itemsTable.innerHTML = '';
+            
+            currentItems.forEach(item => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${item.name}</td>
+                    <td>${item.quantity.toLocaleString()}</td>
+                    <td>${item.unit}</td>
+                    <td>${item.price.toLocaleString()}</td>
+                    <td>${item.total.toLocaleString()}</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="removeItem(${item.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                
+                itemsTable.appendChild(row);
+            });
+        }
+        
+        // حذف آیتم از فاکتور
+        function removeItem(itemId) {
+            currentItems = currentItems.filter(item => item.id !== itemId);
+            renderItemsTable();
+            calculateTotals();
+        }
+        
+        // محاسبه جمع کل فاکتور
+        function calculateTotals() {
+            const subtotal = currentItems.reduce((sum, item) => sum + item.total, 0);
+            const tax = Math.round(subtotal * 0.09);
+            const total = subtotal + tax;
+            
+            document.getElementById('subtotal').textContent = `${subtotal.toLocaleString()} تومان`;
+            document.getElementById('tax').textContent = `${tax.toLocaleString()} تومان`;
+            document.getElementById('total').textContent = `${total.toLocaleString()} تومان`;
+        }
+        
+        // ثبت فاکتور جدید
+        saveInvoiceBtn.addEventListener('click', () => {
+            const date = document.getElementById('invoice-date').value;
+            const customerId = parseInt(invoiceCustomerSelect.value);
+            
+            // اعتبارسنجی
+            if (!isValidDate(date)) {
+                showMessage('invoice-message', 'لطفا تاریخ را به فرمت YYYY/MM/DD وارد کنید', 'error');
+                return;
+            }
+            
+            if (!customerId) {
+                showMessage('invoice-message', 'لطفا طرف حساب را انتخاب کنید', 'error');
+                return;
+            }
+            
+            if (currentItems.length === 0) {
+                showMessage('invoice-message', 'لطفا حداقل یک آیتم به فاکتور اضافه کنید', 'error');
+                return;
+            }
+            
+            const subtotal = currentItems.reduce((sum, item) => sum + item.total, 0);
+            const tax = Math.round(subtotal * 0.09);
+            const total = subtotal + tax;
+            
+            const invoice = {
+                id: Date.now(),
+                date,
+                customerId,
+                items: [...currentItems],
+                subtotal,
+                tax,
+                total
+            };
+            
+            invoices.push(invoice);
+            localStorage.setItem('invoices', JSON.stringify(invoices));
+            
+            showMessage('invoice-message', 'فاکتور با موفقیت ثبت شد', 'success');
+            
+            // پاک کردن فرم
+            document.getElementById('invoice-date').value = '';
+            invoiceCustomerSelect.value = '';
+            currentItems = [];
+            renderItemsTable();
+            calculateTotals();
+        });
+        
+        // ثبت تراکنش پرداخت/دریافت
+        savePaymentBtn.addEventListener('click', () => {
+            const date = document.getElementById('payment-date').value;
+            const customerId = parseInt(paymentCustomerSelect.value);
+            const type = document.getElementById('payment-type').value;
+            const amount = parseInt(document.getElementById('payment-amount').value);
+            const description = document.getElementById('payment-description').value;
+            
+            // اعتبارسنجی
+            if (!isValidDate(date)) {
+                showMessage('payment-message', 'لطفا تاریخ را به فرمت YYYY/MM/DD وارد کنید', 'error');
+                return;
+            }
+            
+            if (!customerId) {
+                showMessage('payment-message', 'لطفا طرف حساب را انتخاب کنید', 'error');
+                return;
+            }
+            
+            if (!amount || amount <= 0) {
+                showMessage('payment-message', 'لطفا مبلغ معتبر وارد کنید', 'error');
+                return;
+            }
+            
+            const transaction = {
+                id: Date.now(),
+                date,
+                customerId,
+                type,
+                amount,
+                description
+            };
+            
+            transactions.push(transaction);
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+            
+            showMessage('payment-message', 'تراکنش با موفقیت ثبت شد', 'success');
+            
+            // پاک کردن فرم
+            document.getElementById('payment-date').value = '';
+            paymentCustomerSelect.value = '';
+            document.getElementById('payment-amount').value = '';
+            document.getElementById('payment-description').value = '';
+        });
+        
+        // ثبت طرف حساب جدید
+        saveCustomerBtn.addEventListener('click', () => {
+            const name = document.getElementById('customer-name').value;
+            const phone = document.getElementById('customer-phone').value;
+            const address = document.getElementById('customer-address').value;
+            
+            if (!name) {
+                showMessage('customer-message', 'لطفا نام طرف حساب را وارد کنید', 'error');
+                return;
+            }
+            
+            const customer = {
+                id: Date.now(),
+                name,
+                phone,
+                address
+            };
+            
+            customers.push(customer);
+            localStorage.setItem('customers', JSON.stringify(customers));
+            
+            showMessage('customer-message', 'طرف حساب با موفقیت ثبت شد', 'success');
+            loadCustomers();
+            
+            // پاک کردن فرم
+            document.getElementById('customer-name').value = '';
+            document.getElementById('customer-phone').value = '';
+            document.getElementById('customer-address').value = '';
+        });
+        
+        // حذف طرف حساب
+        function deleteCustomer(customerId) {
+            if (confirm('آیا از حذف این طرف حساب اطمینان دارید؟')) {
+                customers = customers.filter(c => c.id !== customerId);
+                localStorage.setItem('customers', JSON.stringify(customers));
+                loadCustomers();
+            }
+        }
+        
+        // تولید گزارش
+        generateReportBtn.addEventListener('click', () => {
+            const customerId = reportCustomerSelect.value ? parseInt(reportCustomerSelect.value) : null;
+            const reportType = document.getElementById('report-type').value;
+            
+            let resultHTML = '';
+            
+            if (reportType === 'balance') {
+                resultHTML = generateBalanceReport(customerId);
+            } else if (reportType === 'invoices') {
+                resultHTML = generateInvoicesReport(customerId);
+            } else if (reportType === 'transactions') {
+                resultHTML = generateTransactionsReport(customerId);
+            }
+            
+            document.getElementById('report-result').innerHTML = resultHTML;
+        });
+        
+        // تولید گزارش مانده حساب
+        function generateBalanceReport(customerId) {
+            let filteredCustomers = customerId ? customers.filter(c => c.id === customerId) : customers;
+            
+            let reportHTML = '';
+            
+            filteredCustomers.forEach(customer => {
+                const customerInvoices = invoices.filter(inv => inv.customerId === customer.id);
+                const customerTransactions = transactions.filter(tr => tr.customerId === customer.id);
+                
+                const totalInvoices = customerInvoices.reduce((sum, inv) => sum + inv.total, 0);
+                const totalReceipts = customerTransactions
+                    .filter(tr => tr.type === 'receipt')
+                    .reduce((sum, tr) => sum + tr.amount, 0);
+                const totalPayments = customerTransactions
+                    .filter(tr => tr.type === 'payment')
+                    .reduce((sum, tr) => sum + tr.amount, 0);
+                
+                const balance = totalReceipts - totalInvoices + totalPayments;
+                
+                reportHTML += `
+                    <div class="customer-balance">
+                        مانده حساب ${customer.name}: ${balance.toLocaleString()} تومان
+                    </div>
+                `;
+                
+                reportHTML += `
+                    <div class="section-title">فاکتورهای ${customer.name}</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>تاریخ</th>
+                                <th>مبلغ فاکتور</th>
+                                <th>مالیات</th>
+                                <th>جمع کل</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                customerInvoices.forEach(invoice => {
+                    reportHTML += `
+                        <tr>
+                            <td>${invoice.date}</td>
+                            <td>${invoice.subtotal.toLocaleString()} تومان</td>
+                            <td>${invoice.tax.toLocaleString()} تومان</td>
+                            <td>${invoice.total.toLocaleString()} تومان</td>
+                        </tr>
+                    `;
+                });
+                
+                reportHTML += `
+                        </tbody>
+                    </table>
+                `;
+                
+                reportHTML += `
+                    <div class="section-title">تراکنش های ${customer.name}</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>تاریخ</th>
+                                <th>نوع</th>
+                                <th>مبلغ</th>
+                                <th>توضیحات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                customerTransactions.forEach(transaction => {
+                    reportHTML += `
+                        <tr>
+                            <td>${transaction.date}</td>
+                            <td>${transaction.type === 'receipt' ? 'دریافت' : 'پرداخت'}</td>
+                            <td>${transaction.amount.toLocaleString()} تومان</td>
+                            <td>${transaction.description || '-'}</td>
+                        </tr>
+                    `;
+                });
+                
+                reportHTML += `
+                        </tbody>
+                    </table>
+                `;
+            });
+            
+            return reportHTML;
+        }
+        
+        // تولید گزارش فاکتورها
+        function generateInvoicesReport(customerId) {
+            let filteredInvoices = customerId ? invoices.filter(inv => inv.customerId === customerId) : invoices;
+            
+            let reportHTML = `
+                <div class="section-title">گزارش فاکتورها</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>تاریخ</th>
+                            <th>طرف حساب</th>
+                            <th>مبلغ فاکتور</th>
+                            <th>مالیات</th>
+                            <th>جمع کل</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            filteredInvoices.forEach(invoice => {
+                const customer = customers.find(c => c.id === invoice.customerId);
+                const customerName = customer ? customer.name : 'نامشخص';
+                
+                reportHTML += `
+                    <tr>
+                        <td>${invoice.date}</td>
+                        <td>${customerName}</td>
+                        <td>${invoice.subtotal.toLocaleString()} تومان</td>
+                        <td>${invoice.tax.toLocaleString()} تومان</td>
+                        <td>${invoice.total.toLocaleString()} تومان</td>
+                    </tr>
+                `;
+            });
+            
+            reportHTML += `
+                    </tbody>
+                </table>
+            `;
+            
+            return reportHTML;
+        }
+        
+        // تولید گزارش تراکنش ها
+        function generateTransactionsReport(customerId) {
+            let filteredTransactions = customerId ? transactions.filter(tr => tr.customerId === customerId) : transactions;
+            
+            let reportHTML = `
+                <div class="section-title">گزارش تراکنش ها</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>تاریخ</th>
+                            <th>طرف حساب</th>
+                            <th>نوع</th>
+                            <th>مبلغ</th>
+                            <th>توضیحات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            filteredTransactions.forEach(transaction => {
+                const customer = customers.find(c => c.id === transaction.customerId);
+                const customerName = customer ? customer.name : 'نامشخص';
+                
+                reportHTML += `
+                    <tr>
+                        <td>${transaction.date}</td>
+                        <td>${customerName}</td>
+                        <td>${transaction.type === 'receipt' ? 'دریافت' : 'پرداخت'}</td>
+                        <td>${transaction.amount.toLocaleString()} تومان</td>
+                        <td>${transaction.description || '-'}</td>
+                    </tr>
+                `;
+            });
+            
+            reportHTML += `
+                    </tbody>
+                </table>
+            `;
+            
+            return reportHTML;
+        }
+        
+        // اعتبارسنجی تاریخ شمسی
+        function isValidDate(dateString) {
+            const regex = /^1[0-4]\d{2}\/(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01])$/;
+            return regex.test(dateString);
+        }
+        
+        // نمایش پیام
+        function showMessage(elementId, message, type) {
+            const messageElement = document.getElementById(elementId);
+            messageElement.textContent = message;
+            messageElement.className = `status-message ${type}`;
+            messageElement.style.display = 'block';
+            
+            setTimeout(() => {
+                messageElement.style.display = 'none';
+            }, 3000);
+        }
+        
+        // مقداردهی اولیه
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCustomers();
+            loadReportCustomers();
+        });
+    </script>
+</body>
+</html>
