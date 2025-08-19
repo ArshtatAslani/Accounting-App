@@ -1027,19 +1027,19 @@ addItemBtn.addEventListener('click', () => {
         
         // ارسال فاکتور فروش به فرم گوگل
         function submitSaleInvoiceToGoogle(invoice) {
-            const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdKhpMU4KDf-GdX5V1L-_oC2Kc1Dqfx9Az38gb6HMuc8dB0Bg/viewform?usp=dialog';
+            const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSd0WvDfwSpvSCYEjRz2F4Wnm3OX2X6xiHeb7tCmBBfkwjQxUA/viewform';
             
             // ارسال هر آیتم به صورت جداگانه
             invoice.items.forEach(item => {
                 const data = {
-                    'entry.192461234': invoice.date, // تاریخ شمسی
-                    'entry.1034418495': invoice.customerName, // طرف حساب
-                    'entry.990796832': item.name, // نام کالا
-                    'entry.2104411525': item.quantity, // تعداد
-                    'entry.725136183': item.unit, // واحد
-                    'entry.1176776363': item.price, // قیمت واحد
-                    'entry.560795626': invoice.paymentType === 'cash' ? 'نقدی' : 'اقساطی', // نوع پرداخت
-                    'entry.228424410': invoice.username // نام کاربری
+                    'entry.1573262483': invoice.date, // تاریخ شمسی
+                    'entry.1618589325': invoice.customerName, // طرف حساب
+                    'entry.394371597': item.name, // نام کالا
+                    'entry.15653754': item.quantity, // تعداد
+                    'entry.1965334080': item.unit, // واحد
+                    'entry.1052985231': item.price, // قیمت واحد
+                    'entry.1854957952': invoice.paymentType === 'cash' ? 'نقدی' : 'اقساطی', // نوع پرداخت
+                    'entry.657292151': invoice.username // نام کاربری
                 };
                 
                 submitGoogleForm(data, formUrl, 'فاکتور فروش');
