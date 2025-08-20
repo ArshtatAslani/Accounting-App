@@ -1120,14 +1120,14 @@ addItemBtn.addEventListener('click', () => {
         
         // ارسال اطلاعات پرداخت/دریافت به فرم گوگل
         function submitPaymentToGoogle(transaction) {
-            const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdMZcIjqDaDduJEwtDq8xutdePYyQeGwPsI5cggL86jmaJhhQ/formResponse';
+            const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSc-TkG1w8hVqL08z9kSBt8XfmvzrPcTBd3BPGZYXUnat7qpMA/formResponse';
             
             const data = {
                 'entry.192461234': transaction.date, // تاریخ شمسی
-                'entry.1034418495': transaction.customerName, // طرف حساب
-                'entry.1176776363': transaction.amount, // مبلغ
-                'entry.560795626': transaction.type === 'receipt' ? 'دریافت' : 'پرداخت', // نوع تراکنش
-                'entry.228424410': transaction.username // نام کاربری
+                'entry.1733977312': transaction.customerName, // طرف حساب
+                'entry.1826655612': transaction.amount, // مبلغ
+                'entry.1983291870': transaction.type === 'receipt' ? 'دریافت' : 'پرداخت', // نوع تراکنش
+                'entry.1657178229': transaction.username // نام کاربری
             };
             
             submitGoogleForm(data, formUrl, 'تراکنش');
