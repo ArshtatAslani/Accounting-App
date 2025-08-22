@@ -376,6 +376,10 @@
             letter-spacing: 0.5px;
         }
         
+        .per-carton-container {
+            display: none;
+        }
+        
         @media (max-width: 768px) {
             .col {
                 flex: 1 1 100%;
@@ -524,6 +528,21 @@
                     <div class="input-group">
                         <label for="item-price-input">قیمت واحد (تومان)</label>
                         <input type="number" id="item-price-input" min="0" placeholder="قیمت واحد">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- فیلد تعداد در کارتن که فقط هنگام انتخاب واحد کارتن نمایش داده می‌شود -->
+            <div id="per-carton-container" class="per-carton-container">
+                <div class="row">
+                    <div class="col">
+                        <div class="input-group">
+                            <label for="item-per-carton-input">تعداد در کارتن</label>
+                            <input type="number" id="item-per-carton-input" min="1" value="1" placeholder="تعداد در هر کارتن">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <!-- فضای خالی برای همترازی -->
                     </div>
                 </div>
             </div>
@@ -753,6 +772,9 @@
         const logoutBtn = document.getElementById('logout-btn');
         const invoiceTypeBtns = document.querySelectorAll('.invoice-type-btn');
         const paymentTypeBtns = document.querySelectorAll('.payment-type-btn');
+        const itemUnitSelect = document.getElementById('item-unit-select');
+        const perCartonContainer = document.getElementById('per-carton-container');
+        const itemPerCartonInput = document.getElementById('item-per-carton-input');
         
         // متغیرهای موقت
         let currentItems = [];
@@ -805,6 +827,15 @@
             });
         });
         
+        // تغییر واحد اندازه گیری - نمایش یا مخفی کردن فیلد تعداد در کارتن
+        itemUnitSelect.addEventListener('change', function() {
+            if (this.value === 'کارتن') {
+                perCartonContainer.style.display = 'block';
+            } else {
+                perCartonContainer.style.display = 'none';
+            }
+        });
+        
         // ورود به سیستم
         loginBtn.addEventListener('click', () => {
             const username = document.getElementById('username').value;
@@ -841,6 +872,11 @@
         function showLoginPage() {
             loginPage.style.display = 'block';
             mainApp.style.display = 'none';
+        }
+        
+        // قالب‌بندی اعداد با جداکننده هزارگان
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
         
         // بارگذاری طرف حساب ها از Google Sheets
@@ -942,33 +978,38 @@
         }
         
         // افزودن آیتم به فاکتور
-        addItemBtn.addEventListener('click', () => {
-            const name = document.getElementById('item-name-select').value;
-            const quantity = parseInt(document.getElementById('item-quantity-input').value);
-            const unit = document.getElementById('item-unit-select').value;
-            const price = parseInt(document.getElementById('item-price-input').value);
-            
-            if (!name || !quantity || !price) {
-                showMessage('invoice-message', 'لطفا اطلاعات آیتم را کامل وارد کنید', 'error');
-                return;
-            }
-            
-            // محاسبه قیمت کل بر اساس واحد
-            let total;
-            if (unit === 'کارتن') {
-                // اگر واحد کارتن است، قیمت واحد در تعداد ضرب می‌شود
-                total = quantity * price;
-            } else {
-                // برای سایر واحدها (عدد) قیمت واحد در تعداد ضرب می‌شود
-                total = quantity * price;
-            }
+addItemBtn.addEventListener('click', () => {
+    const name = document.getElementById('item-name-select').value;
+    const quantity = parseInt(document.getElementById('item-quantity-input').value);
+    const unit = document.getElementById('item-unit-select').value;
+    const price = parseInt(document.getElementById('item-price-input').value);
+    const perCarton = unit === 'کارتن' ? parseInt(itemPerCartonInput.value) : 1;
+    
+    if (!name || !quantity || !price) {
+        showMessage('invoice-message', 'لطفا اطلاعات آیتم را کامل وارد کنید', 'error');
+        return;
+    }
+    
+    // محاسبه قیمت کل بر اساس واحد
+    let total;
+    let displayPrice;
+    
+    if (unit === 'کارتن') {
+        // اگر واحد کارتن است، قیمت واحد در تعداد در کارتن ضرب می‌شود
+        displayPrice = perCarton * price;
+        total = quantity * displayPrice;
+    } else {
+        // برای سایر واحدها (عدد) قیمت واحد در تعداد ضرب می‌شود
+        displayPrice = price;
+        total = quantity * price;
+    }
             
             const item = {
                 id: Date.now(),
                 name,
                 quantity,
                 unit,
-                price,
+                price: displayPrice,
                 total
             };
             
@@ -980,6 +1021,9 @@
             document.getElementById('item-name-select').value = '';
             document.getElementById('item-quantity-input').value = '1';
             document.getElementById('item-price-input').value = '';
+            if (unit === 'کارتن') {
+                itemPerCartonInput.value = '1';
+            }
         });
         
         // نمایش آیتم های فاکتور در جدول
@@ -991,10 +1035,10 @@
                 
                 row.innerHTML = `
                     <td>${item.name}</td>
-                    <td>${item.quantity.toLocaleString()}</td>
+                    <td>${formatNumber(item.quantity)}</td>
                     <td>${item.unit}</td>
-                    <td>${item.price.toLocaleString()}</td>
-                    <td>${item.total.toLocaleString()}</td>
+                    <td>${formatNumber(item.price)} تومان</td>
+                    <td>${formatNumber(item.total)} تومان</td>
                     <td>
                         <button class="btn btn-danger btn-sm" onclick="removeItem(${item.id})">
                             <i class="fas fa-trash"></i>
@@ -1017,7 +1061,7 @@
         function calculateTotals() {
             const total = currentItems.reduce((sum, item) => sum + item.total, 0);
             
-            document.getElementById('total-amount').textContent = `${total.toLocaleString()} تومان`;
+            document.getElementById('total-amount').textContent = `${formatNumber(total)} تومان`;
         }
         
         // ثبت فاکتور جدید
@@ -1185,22 +1229,21 @@
         }
         
         // ثبت طرف حساب جدید
-        saveCustomerBtn.addEventListener('click', () => {
-            const name = document.getElementById('customer-name-input').value;
-            const phone = document.getElementById('customer-phone-input').value;
-            const province = document.getElementById('customer-province-select').value;
-            const address = document.getElementById('customer-address-input').value;
-            
-            if (!name) {
-                showMessage('customer-message', 'لطفا نام طرف حساب را وارد کنید', 'error');
-                return;
-            }
-            
-            // اعتبارسنجی استان
-            if (!province) {
-                showMessage('customer-message', 'لطفا استان را انتخاب کنید', 'error');
-                return;
-            }
+ saveCustomerBtn.addEventListener('click', () => {
+    const name = document.getElementById('customer-name-input').value;
+    const phone = document.getElementById('customer-phone-input').value;
+    const province = document.getElementById('customer-province-select').value;
+    const address = document.getElementById('customer-address-input').value;
+    
+    if (!name) {
+        showMessage('customer-message', 'لطفا نام طرف حساب را وارد کنید', 'error');
+        return;
+    }
+                // اعتبارسنجی استان
+    if (!province) {
+        showMessage('customer-message', 'لطفا استان را انتخاب کنید', 'error');
+        return;
+    }
             
             // اعتبارسنجی شماره تلفن
             if (phone && !/^\d{11}$/.test(phone)) {
@@ -1318,7 +1361,7 @@
                 
                 reportHTML += `
                     <div class="customer-balance">
-                        مانده حساب ${customer.name}: ${balance.toLocaleString()} تومان
+                        مانده حساب ${customer.name}: ${formatNumber(balance)} تومان
                     </div>
                 `;
                 
@@ -1343,7 +1386,7 @@
                             <td>${invoice.date}</td>
                             <td>${invoice.type === 'sale' ? 'فروش' : 'خرید'}</td>
                             <td>${invoice.paymentType === 'cash' ? 'نقدی' : 'اقساطی'}</td>
-                            <td>${invoice.total.toLocaleString()} تومان</td>
+                            <td>${formatNumber(invoice.total)} تومان</td>
                         </tr>
                     `;
                 });
@@ -1374,7 +1417,7 @@
                         <tr>
                             <td>${transaction.date}</td>
                             <td>${transaction.type === 'receipt' ? 'دریافت' : 'پرداخت'}</td>
-                            <td>${transaction.amount.toLocaleString()} تومان</td>
+                            <td>${formatNumber(transaction.amount)} تومان</td>
                             <td>${transaction.description || '-'}</td>
                         </tr>
                     `;
@@ -1420,7 +1463,7 @@
                         <td>${customerName}</td>
                         <td>${invoice.type === 'sale' ? 'فروش' : 'خرید'}</td>
                         <td>${invoice.paymentType === 'cash' ? 'نقدی' : 'اقساطی'}</td>
-                        <td>${invoice.total.toLocaleString()} تومان</td>
+                        <td>${formatNumber(invoice.total)} تومان</td>
                     </tr>
                 `;
             });
@@ -1463,7 +1506,7 @@
                         <td>${transaction.date}</td>
                         <td>${customerName}</td>
                         <td>${transaction.type === 'receipt' ? 'دریافت' : 'پرداخت'}</td>
-                        <td>${transaction.amount.toLocaleString()} تومان</td>
+                        <td>${formatNumber(transaction.amount)} تومان</td>
                         <td>${transaction.description || '-'}</td>
                     </tr>
                 `;
