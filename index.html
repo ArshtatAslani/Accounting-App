@@ -942,26 +942,26 @@
         }
         
         // افزودن آیتم به فاکتور
-addItemBtn.addEventListener('click', () => {
-    const name = document.getElementById('item-name-select').value;
-    const quantity = parseInt(document.getElementById('item-quantity-input').value);
-    const unit = document.getElementById('item-unit-select').value;
-    const price = parseInt(document.getElementById('item-price-input').value);
-    
-    if (!name || !quantity || !price) {
-        showMessage('invoice-message', 'لطفا اطلاعات آیتم را کامل وارد کنید', 'error');
-        return;
-    }
-    
-    // محاسبه قیمت کل بر اساس واحد
-    let total;
-    if (unit === 'کارتن') {
-        // اگر واحد کارتن است، قیمت واحد در تعداد ضرب می‌شود
-        total = quantity * price;
-    } else {
-        // برای سایر واحدها (عدد) قیمت واحد در تعداد ضرب می‌شود
-        total = quantity * price;
-    }
+        addItemBtn.addEventListener('click', () => {
+            const name = document.getElementById('item-name-select').value;
+            const quantity = parseInt(document.getElementById('item-quantity-input').value);
+            const unit = document.getElementById('item-unit-select').value;
+            const price = parseInt(document.getElementById('item-price-input').value);
+            
+            if (!name || !quantity || !price) {
+                showMessage('invoice-message', 'لطفا اطلاعات آیتم را کامل وارد کنید', 'error');
+                return;
+            }
+            
+            // محاسبه قیمت کل بر اساس واحد
+            let total;
+            if (unit === 'کارتن') {
+                // اگر واحد کارتن است، قیمت واحد در تعداد ضرب می‌شود
+                total = quantity * price;
+            } else {
+                // برای سایر واحدها (عدد) قیمت واحد در تعداد ضرب می‌شود
+                total = quantity * price;
+            }
             
             const item = {
                 id: Date.now(),
@@ -1185,21 +1185,22 @@ addItemBtn.addEventListener('click', () => {
         }
         
         // ثبت طرف حساب جدید
- saveCustomerBtn.addEventListener('click', () => {
-    const name = document.getElementById('customer-name-input').value;
-    const phone = document.getElementById('customer-phone-input').value;
-    const province = document.getElementById('customer-province-select').value;
-    const address = document.getElementById('customer-address-input').value;
-    
-    if (!name) {
-        showMessage('customer-message', 'لطفا نام طرف حساب را وارد کنید', 'error');
-        return;
-    }
-                // اعتبارسنجی استان
-    if (!province) {
-        showMessage('customer-message', 'لطفا استان را انتخاب کنید', 'error');
-        return;
-    }
+        saveCustomerBtn.addEventListener('click', () => {
+            const name = document.getElementById('customer-name-input').value;
+            const phone = document.getElementById('customer-phone-input').value;
+            const province = document.getElementById('customer-province-select').value;
+            const address = document.getElementById('customer-address-input').value;
+            
+            if (!name) {
+                showMessage('customer-message', 'لطفا نام طرف حساب را وارد کنید', 'error');
+                return;
+            }
+            
+            // اعتبارسنجی استان
+            if (!province) {
+                showMessage('customer-message', 'لطفا استان را انتخاب کنید', 'error');
+                return;
+            }
             
             // اعتبارسنجی شماره تلفن
             if (phone && !/^\d{11}$/.test(phone)) {
